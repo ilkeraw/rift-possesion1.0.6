@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rift Possession</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- Screen 1: Lobby & Setup View -->
+    <section id="lobby-screen" class="screen">
+      <div class="lobby-card">
+        <div class="lobby-brand">
+          <div class="lobby-badge">LOL GRID STRATEGY</div>
+          <h1 class="lobby-title">RIFT POSSESSION</h1>
+          <p class="lobby-subtitle">Claim hex criteria with League of Legends champions</p>
+        </div>
+
+        <div class="lobby-form">
+          <div class="form-group">
+            <label for="room-input">Room Code</label>
+            <div class="room-input-row">
+              <input type="text" id="room-input" placeholder="ENTER ROOM CODE (e.g. RIFT1)" maxlength="8" autocomplete="off" spellcheck="false">
+              <button id="join-btn">ENTER ROOM</button>
+            </div>
+            <p id="lobby-status" class="form-hint">Enter a room code and adjust settings to proceed.</p>
+          </div>
+
+          <div class="settings-header">
+            <span>Match Settings</span>
+          </div>
+
+          <div class="toggles">
+            <label class="toggle-card">
+              <div class="toggle-header">
+                <input type="checkbox" id="chain-toggle">
+                <span class="label-title">Hex Chaining</span>
+              </div>
+              <span class="desc">Continuous path propagation across matches</span>
+            </label>
+
+            <label class="toggle-card">
+              <div class="toggle-header">
+                <input type="checkbox" id="locking-toggle" checked>
+                <span class="label-title">Champion Locking</span>
+              </div>
+              <span class="desc">Locked champions cannot be reused</span>
+            </label>
+
+            <div class="toggle-card timer-select-card">
+              <span class="label-title">Turn Timer</span>
+              <select id="timer-select">
+                <option value="30">30 Seconds</option>
+                <option value="60">1 Minute</option>
+                <option value="0">Unlimited</option>
+              </select>
+              <span class="desc">Time allowed per turn</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screen 2: Game Playing Area View -->
+    <section id="game-screen" class="screen hidden">
+      <!-- Edge Top Bar: Room on left edge, Timer in center, Live status on right edge -->
+      <header id="game-header">
+        <div class="header-left">
+          <div class="room-pill">ROOM <span id="active-room-display">----</span></div>
+        </div>
+
+        <div id="status-panel">
+          <h2 id="turn-announcement">Waiting for match...</h2>
+          <div id="timer-bar"><div id="timer-progress"></div></div>
+          <p id="system-msg">Waiting for opponent to connect...</p>
+        </div>
+
+        <div class="header-right">
+          <div class="status-indicator-live"><span class="dot"></span> LIVE MATCH</div>
+        </div>
+      </header>
+
+      <!-- Main Board: Balanced view with clean breathing margins -->
+      <main id="board-container">
+        <svg id="hex-grid" viewBox="-270 -245 540 490"></svg>
+      </main>
+
+      <!-- Compact Bottom Bar: Blue Side score (left), Champion input (center), Red Side score (right) -->
+      <footer id="action-panel">
+        <!-- Blue Side Score Badge -->
+        <div class="side-badge blue-side-card">
+          <div class="side-title">BLUE SIDE</div>
+          <div class="side-score-box">
+            <span class="side-score-num" id="p1-score">0</span>
+            <span class="side-score-lbl">HEXES</span>
+          </div>
+        </div>
+
+        <!-- Champion Name Input & Lock-in in the Center -->
+        <div class="center-input-box">
+          <div id="selected-criteria-display">Selected: <em>None</em></div>
+          <div class="input-row">
+            <div class="input-wrapper">
+              <input type="text" id="champ-input" placeholder="Type Champion name to claim hex..." disabled autocomplete="off">
+              <div id="autocomplete-list" class="autocomplete-list hidden"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Red Side Score Badge -->
+        <div class="side-badge red-side-card">
+          <div class="side-title">RED SIDE</div>
+          <div class="side-score-box">
+            <span class="side-score-num" id="p2-score">0</span>
+            <span class="side-score-lbl">HEXES</span>
+          </div>
+        </div>
+      </footer>
+    </section>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
